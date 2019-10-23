@@ -1,6 +1,6 @@
 package main.java.lab2.threads;
 
-import main.java.lab2.configuration.Likelihood;
+import main.java.lab2.configuration.LikelihoodType;
 import main.java.lab2.configuration.RunConfiguration;
 
 import java.text.DecimalFormat;
@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 public class MyThread extends Thread {
     private static NumberFormat TIME_FORMATTER = new DecimalFormat("#0.0000000");
 
+    private ThreadType type;
     private RunConfiguration configuration;
     private long startTime;
     private long endTime;
@@ -16,15 +17,21 @@ public class MyThread extends Thread {
 
     public MyThread(RunConfiguration configuration, ThreadType type) {
         this.configuration = configuration;
-        this.portion = configuration.likelihood == Likelihood.CONSTANT ?
+        this.portion = configuration.likelihoodType == LikelihoodType.CONSTANT ?
                 RunConfiguration.getRandomPortion(type, configuration.range) :
                 RunConfiguration.getRandomPortionWithVariableLikelihood(type, configuration.range);
+        this.type = type;
     }
 
     @Override
     public void run() {
         try {
-            configuration.dummyBufor.operation(portion, this);
+            if (type == ThreadType.CONSUMER) {
+                configuration.bufor.consume(this);
+            }
+            else {
+                configuration.bufor.produce(this);
+            }
             configuration.writer.write(portion + " " + getTime());
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,6 +48,10 @@ public class MyThread extends Thread {
 
     public void setConfiguration(RunConfiguration configuration) {
         this.configuration = configuration;
+    }
+
+    public int getPortion() {
+        return portion;
     }
 
     public String getTime() {

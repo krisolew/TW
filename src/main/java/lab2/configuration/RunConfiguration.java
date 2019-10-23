@@ -1,5 +1,8 @@
 package main.java.lab2.configuration;
 
+import main.java.lab2.bufor.AbstractBufor;
+import main.java.lab2.bufor.AlgoBufor;
+import main.java.lab2.bufor.BuforType;
 import main.java.lab2.bufor.DummyBufor;
 import main.java.lab2.threads.ThreadType;
 
@@ -8,20 +11,20 @@ import java.util.Random;
 
 public class RunConfiguration {
     private final static Random random = new Random();
-    public DummyBufor dummyBufor;
+    public AbstractBufor bufor;
     public StringFileWriter writer;
     public int capacity;
     public int numOfThreads;
     public int range;
-    public Likelihood likelihood;
+    public LikelihoodType likelihoodType;
 
-    public RunConfiguration(String file, int capacity, int numOfThreads, Likelihood likelihood) throws IOException {
-        this.dummyBufor = new DummyBufor(0, capacity);
+    public RunConfiguration(String file, int capacity, int numOfThreads, LikelihoodType likelihoodType, BuforType buforType) throws IOException {
+        this.bufor = buforType == BuforType.DUMMY ? new DummyBufor(capacity) : new AlgoBufor(capacity);
         this.capacity = capacity;
         this.numOfThreads = numOfThreads;
         this.writer = new StringFileWriter(file);
         this.range = capacity/2;
-        this.likelihood = likelihood;
+        this.likelihoodType = likelihoodType;
     }
 
     public static int getRandomPortion(ThreadType type, int range) {

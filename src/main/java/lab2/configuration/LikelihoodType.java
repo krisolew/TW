@@ -1,5 +1,5 @@
 package main.java.lab2.configuration;
 
-public enum Likelihood {
+public enum LikelihoodType {
     CONSTANT, VARIABLE
 }
