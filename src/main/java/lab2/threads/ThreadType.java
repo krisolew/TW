@@ -1,4 +1,4 @@
-package main.java.lab2;
+package main.java.lab2.threads;
 
 public enum ThreadType {
     CONSUMER(-1), PRODUCER(1);

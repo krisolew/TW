@@ -1,4 +1,4 @@
-package main.java.lab2;
+package main.java.lab2.threads;
 
 import java.util.LinkedList;
 
@@ -6,8 +6,8 @@ import static java.lang.System.nanoTime;
 
 public class ThreadsExecutor {
 
-    LinkedList<MyThread> threads = new LinkedList<>();
-    MyThread firstThread;
+    private LinkedList<MyThread> threads = new LinkedList<>();
+    public MyThread firstThread;
 
     public void add(MyThread thread){
         threads.add(thread);

@@ -1,4 +1,6 @@
-package main.java.lab2;
+package main.java.lab2.bufor;
+
+import main.java.lab2.threads.MyThread;
 
 import static java.lang.System.nanoTime;
 
