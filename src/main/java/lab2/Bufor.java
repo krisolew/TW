@@ -26,7 +26,6 @@ public class Bufor {
     public void operation(int portion, MyThread thread) throws InterruptedException {
         thread.setStartTime(nanoTime());
         synchronized (instance) {
-            thread.setStartTime(nanoTime());
             while (this.value + portion < 0 || this.value + portion > capacity) {
                 instance.wait();
             }
@@ -42,11 +41,19 @@ public class Bufor {
         return type.getValue() * random.nextInt(capacity / 2);
     }
 
-    public static int getRandomPortionWithVariableLikelihood(ThreadType type){
+    public static int getRandomPortionWithVariableLikelihood(ThreadType type) {
         int param = random.nextInt(capacity);
-        if (param < capacity/2) return type.getValue() * random.nextInt(capacity/10);
-        if (param < 3*capacity/4) return type.getValue() * random.nextInt(capacity/8);
-        if (param < 4*capacity/5) return type.getValue() * random.nextInt(capacity/6);
-        else return type.getValue() * random.nextInt(capacity/2);
+        if (param < (capacity / 2)) {
+            return type.getValue() * random.nextInt(capacity / 10);
+        }
+        else if (param < (3 * capacity / 4)) {
+            return type.getValue() * random.nextInt(capacity / 8);
+        }
+        else if (param < (19 * capacity / 20)) {
+            return type.getValue() * random.nextInt(capacity / 6);
+        }
+        else {
+            return type.getValue() * random.nextInt(capacity / 2);
+        }
     }
 }
