@@ -1,21 +1,18 @@
 package main.java.lab2;
 
 public class MyThread extends Thread {
-    private BasicBufor bufor;
-    private ThreadType type;
     private long startTime;
     private long endTime;
+    private int portion;
 
-    public MyThread(ThreadType type) {
-        this.bufor = BasicBufor.initialize();
-        this.type = type;
+    public MyThread(int portion) {
+        this.portion = portion;
     }
 
     @Override
     public void run() {
         try {
-            int portion = DummyBufor.getRandomPortionWithVariableLikelihood(type);
-            bufor.operation(portion, this);
+            Main.dummyBufor.operation(portion, this);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

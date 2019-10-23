@@ -13,7 +13,6 @@ public class ThreadsExecutor {
         threads.add(thread);
     }
 
-
     public void waitThreads() {
         threads.forEach(thread -> thread.setStartTime(nanoTime()));
     }
