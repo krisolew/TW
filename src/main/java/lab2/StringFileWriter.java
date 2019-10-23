@@ -13,5 +13,6 @@ public class StringFileWriter {
 
     public void write(String content) throws IOException {
         fileWriter.write(content);
+        fileWriter.close();
     }
 }
