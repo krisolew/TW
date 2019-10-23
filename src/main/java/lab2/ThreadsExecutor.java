@@ -9,7 +9,7 @@ public class ThreadsExecutor {
     LinkedList<MyThread> threads = new LinkedList<>();
     MyThread firstThread;
 
-    public void add(MyThread thread){
+    public void add(MyThread thread) {
         threads.add(thread);
     }
 
@@ -20,5 +20,15 @@ public class ThreadsExecutor {
 
     public void notifyThreads() {
         firstThread = threads.peek();
+    }
+
+    public void start() {
+        threads.forEach(MyThread::start);
+    }
+
+    public void join() throws InterruptedException {
+        for (Thread thread : threads) {
+            thread.join();
+        }
     }
 }

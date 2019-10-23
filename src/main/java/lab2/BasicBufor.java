@@ -4,20 +4,12 @@ import java.util.Random;
 
 public class BasicBufor {
     protected static final Integer capacity = 10000;
-    protected static BasicBufor instance = null;
-    protected static Random random = new Random();;
+    protected static Random random = new Random();
     protected Integer value;
     protected int counter = 1;
 
     public BasicBufor(Integer value) {
         this.value = value;
-    }
-
-    public static synchronized BasicBufor initialize() {
-        if (instance == null) {
-            instance = new BasicBufor(0);
-        }
-        return instance;
     }
 
     public static int getRandomPortion(ThreadType type) {

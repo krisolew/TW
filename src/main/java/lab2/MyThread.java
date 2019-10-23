@@ -6,8 +6,8 @@ public class MyThread extends Thread {
     private long startTime;
     private long endTime;
 
-    public MyThread(ThreadType type) {
-        this.bufor = BasicBufor.initialize();
+    public MyThread(ThreadType type, BasicBufor bufor) {
+        this.bufor = bufor;
         this.type = type;
     }
 
