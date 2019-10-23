@@ -8,18 +8,30 @@ public class Main {
     public static void main(String[] args) {
         int numOfThreads = 1000;
 
+        ThreadsExecutor producerExecutor = new ThreadsExecutor();
+        ThreadsExecutor consumerExecutor = new ThreadsExecutor();
         List<MyThread> producer = new LinkedList<>();
         List<MyThread> consumer = new LinkedList<>();
 
-        IntStream.range(0, numOfThreads).forEach(num -> producer.add(new MyThread(ThreadType.PRODUCER)));
-        IntStream.range(0, numOfThreads).forEach(num -> consumer.add(new MyThread(ThreadType.CONSUMER)));
+        IntStream.range(0, numOfThreads).forEach(num -> {
+            producer.add(new MyThread(ThreadType.PRODUCER));
+            producerExecutor.add(new MyThread(ThreadType.PRODUCER));
+        });
+        IntStream.range(0, numOfThreads).forEach(num -> {
+            consumer.add(new MyThread(ThreadType.CONSUMER));
+            consumerExecutor.add(new MyThread(ThreadType.CONSUMER));
+        });
 
         consumer.forEach(Thread::start);
         producer.forEach(Thread::start);
 
         try {
-            for (MyThread thread : producer) { thread.join(); }
-            for (MyThread thread : consumer) { thread.join(); }
+            for (MyThread thread : producer) {
+                thread.join();
+            }
+            for (MyThread thread : consumer) {
+                thread.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
