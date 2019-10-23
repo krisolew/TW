@@ -1,6 +1,11 @@
 package main.java.lab2;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class MyThread extends Thread {
+    private static NumberFormat TIME_FORMATTER = new DecimalFormat("#0.0000000");
+
     private long startTime;
     private long endTime;
     private int portion;
@@ -13,9 +18,11 @@ public class MyThread extends Thread {
     public void run() {
         try {
             Main.dummyBufor.operation(portion, this);
-        } catch (InterruptedException e) {
+            Main.writer.write(portion + " " + getTime());
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void setStartTime(long startTime) {
@@ -26,7 +33,7 @@ public class MyThread extends Thread {
         this.endTime = endTime;
     }
 
-    public double countTime() {
-        return (double) (endTime - startTime) / 1_000_000_000.0;
+    public String getTime() {
+        return TIME_FORMATTER.format((double) (endTime - startTime) / 1_000_000_000.0);
     }
 }

@@ -11,8 +11,11 @@ public class StringFileWriter {
         this.fileWriter = new FileWriter(fileName);
     }
 
-    public void write(String content) throws IOException {
-        fileWriter.write(content);
+    public synchronized void write(String content) throws IOException {
+        fileWriter.write(content + '\n');
+    }
+
+    public void close() throws IOException {
         fileWriter.close();
     }
 }

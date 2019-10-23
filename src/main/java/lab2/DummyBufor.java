@@ -22,7 +22,7 @@ public class DummyBufor {
             this.value += portion;
             Main.dummyBufor.notifyAll();
             System.out.println("Nr: " + counter++ + ", stan bufora: " + (value - portion) + " -> " + value +
-                    ", porcja: " + portion + ", czas oczekiwania: " + thread.countTime());
+                    ", porcja: " + portion + ", czas oczekiwania: " + thread.getTime());
         }
     }
 }
