@@ -14,17 +14,17 @@ public class AlgoBufor{
 
     public void operation(int portion, ThreadsExecutor threadsExecutor) throws InterruptedException {
 
-        synchronized (Main.dummyBufor) {
+        synchronized (this) {
             if (null == threadsExecutor.firstThread) {
                 threadsExecutor.waitThreads();
             }
             while (this.value + portion < 0 || this.value + portion > capacity) {
-                Main.dummyBufor.wait();
+                this.wait();
             }
             threadsExecutor.firstThread.setEndTime(nanoTime());
             this.value += portion;
             threadsExecutor.notifyThreads();
-            Main.dummyBufor.notifyAll();
+            this.notifyAll();
         }
     }
 }

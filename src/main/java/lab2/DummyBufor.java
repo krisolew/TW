@@ -14,13 +14,13 @@ public class DummyBufor {
 
     public void operation(int portion, MyThread thread) throws InterruptedException {
         thread.setStartTime(nanoTime());
-        synchronized (Main.dummyBufor) {
+        synchronized (this) {
             while (this.value + portion < 0 || this.value + portion > capacity) {
-                Main.dummyBufor.wait();
+                this.wait();
             }
             thread.setEndTime(nanoTime());
             this.value += portion;
-            Main.dummyBufor.notifyAll();
+            this.notifyAll();
             System.out.println("Nr: " + counter++ + ", stan bufora: " + (value - portion) + " -> " + value +
                     ", porcja: " + portion + ", czas oczekiwania: " + thread.getTime());
         }

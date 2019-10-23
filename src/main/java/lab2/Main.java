@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 public class Main {
     public static DummyBufor dummyBufor;
@@ -23,19 +22,15 @@ public class Main {
             e.printStackTrace();
         }
 
-        ThreadsExecutor producerExecutor = new ThreadsExecutor();
-        ThreadsExecutor consumerExecutor = new ThreadsExecutor();
+//        ThreadsExecutor producerExecutor = new ThreadsExecutor();
+//        ThreadsExecutor consumerExecutor = new ThreadsExecutor();
         List<MyThread> producer = new LinkedList<>();
         List<MyThread> consumer = new LinkedList<>();
 
-        IntStream.range(0, numOfThreads).forEach(num -> {
-            producer.add(new MyThread(getRandomPortionWithVariableLikelihood(ThreadType.PRODUCER, range)));
-            producerExecutor.add(new MyThread(getRandomPortionWithVariableLikelihood(ThreadType.PRODUCER, range)));
-        });
-        IntStream.range(0, numOfThreads).forEach(num -> {
-            consumer.add(new MyThread(getRandomPortionWithVariableLikelihood(ThreadType.CONSUMER, range)));
-            consumerExecutor.add(new MyThread(getRandomPortionWithVariableLikelihood(ThreadType.CONSUMER, range)));
-        });
+        for (int i = 0; i < numOfThreads; i++) {
+            producer.add(new MyThread(getRandomPortion(ThreadType.PRODUCER, range)));
+            consumer.add(new MyThread(getRandomPortion(ThreadType.CONSUMER, range)));
+        }
 
         consumer.forEach(Thread::start);
         producer.forEach(Thread::start);
@@ -69,7 +64,8 @@ public class Main {
     }
 
     public static int getRandomPortion(ThreadType type, int range) {
-        return type.getValue() * random.nextInt(range / 2);
+        int i = type.getValue() * random.nextInt(range);
+        return i;
     }
 
     public static int getRandomPortionWithVariableLikelihood(ThreadType type, int range) {
