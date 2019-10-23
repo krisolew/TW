@@ -20,6 +20,5 @@ public class ThreadsExecutor {
 
     public void notifyThreads() {
         firstThread = threads.peek();
-        firstThread.setEndTime(nanoTime());
     }
 }

@@ -1,7 +1,5 @@
 package main.java.lab2;
 
-
-import static java.lang.System.in;
 import static java.lang.System.nanoTime;
 
 public class AlgoBufor extends BasicBufor{
@@ -17,7 +15,6 @@ public class AlgoBufor extends BasicBufor{
                 threadsExecutor.waitThreads();
             }
             while (this.value + portion < 0 || this.value + portion > capacity) {
-                threadsExecutor.firstThread.setStartTime(nanoTime());
                 instance.wait();
             }
             threadsExecutor.firstThread.setEndTime(nanoTime());
