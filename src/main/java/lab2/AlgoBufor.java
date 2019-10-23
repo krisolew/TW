@@ -1,16 +1,10 @@
 package main.java.lab2;
 
-import java.util.Random;
 
+import static java.lang.System.in;
 import static java.lang.System.nanoTime;
 
 public class AlgoBufor extends BasicBufor{
-
-    private Integer value;
-    private static AlgoBufor instance = null;
-    private static final Integer capacity = 10000;
-    private static Random random;
-    private int counter = 1;
 
     private AlgoBufor(Integer value) {
         super(value);
@@ -24,12 +18,12 @@ public class AlgoBufor extends BasicBufor{
             }
             while (this.value + portion < 0 || this.value + portion > capacity) {
                 threadsExecutor.firstThread.setStartTime(nanoTime());
-                threadsExecutor.firstThread.wait();
+                instance.wait();
             }
             threadsExecutor.firstThread.setEndTime(nanoTime());
             this.value += portion;
             threadsExecutor.notifyThreads();
-
+            instance.notifyAll();
         }
     }
 

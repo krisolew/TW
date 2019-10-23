@@ -1,7 +1,6 @@
 package main.java.lab2;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import static java.lang.System.nanoTime;
 
@@ -21,5 +20,6 @@ public class ThreadsExecutor {
 
     public void notifyThreads() {
         firstThread = threads.peek();
+        firstThread.setEndTime(nanoTime());
     }
 }
