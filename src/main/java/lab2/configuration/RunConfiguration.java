@@ -29,7 +29,7 @@ public class RunConfiguration {
         this.capacity = capacity;
         this.numOfThreads = numOfThreads;
         this.writer = new StringFileWriter(PACKAGE_PATH + file);
-        this.range = capacity/2;
+        this.range = capacity / 2;
         this.likelihoodType = likelihoodType;
     }
 
@@ -39,16 +39,13 @@ public class RunConfiguration {
 
     public static int getRandomPortionWithVariableLikelihood(ThreadType type, int range) {
         int param = RANDOM.nextInt(range);
-        if (param < (range/2)) {
+        if (param < (range / 2)) {
             return type.getValue() * RANDOM.nextInt(range / 5);
-        }
-        else if (param < (3 * range / 4)) {
+        } else if (param < (3 * range / 4)) {
             return type.getValue() * RANDOM.nextInt(range / 4);
-        }
-        else if (param < (19 * range / 20)) {
+        } else if (param < (19 * range / 20)) {
             return type.getValue() * RANDOM.nextInt(range / 3);
-        }
-        else {
+        } else {
             return type.getValue() * RANDOM.nextInt(range);
         }
     }
@@ -94,7 +91,7 @@ public class RunConfiguration {
         return configurations;
     }
 
-    private static String getFileName(){
+    private static String getFileName() {
         FILE_NUMBER++;
         return FILE_NAME_PATTERN.replace("_", FILE_NUMBER.toString());
     }

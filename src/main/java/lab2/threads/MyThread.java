@@ -6,6 +6,8 @@ import main.java.lab2.configuration.RunConfiguration;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import static java.lang.Math.abs;
+
 public class MyThread extends Thread {
     private static NumberFormat TIME_FORMATTER = new DecimalFormat("#0.0000000");
 
@@ -28,14 +30,19 @@ public class MyThread extends Thread {
         try {
             if (type == ThreadType.CONSUMER) {
                 configuration.bufor.consume(this);
-            }
-            else {
+            } else {
                 configuration.bufor.produce(this);
             }
-            configuration.writer.write(portion + " " + getTime());
+            configuration.writer.write(getFileLog());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getFileLog() {
+        String space = "\t";
+        if (abs(portion) < 1000) space += space;
+        return abs(portion) + space + getTime();
     }
 
     public void setStartTime(long startTime) {
@@ -44,10 +51,6 @@ public class MyThread extends Thread {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
-    }
-
-    public void setConfiguration(RunConfiguration configuration) {
-        this.configuration = configuration;
     }
 
     public int getPortion() {
