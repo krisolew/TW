@@ -5,7 +5,6 @@ import main.java.lab2.threads.MyThread;
 import static java.lang.System.nanoTime;
 
 public abstract class AbstractBufor {
-    private static final Object LOCK = new Object();
     private static int counter = 0;
     private int capacity;
     private Integer value = 0;
@@ -19,15 +18,15 @@ public abstract class AbstractBufor {
     public abstract void produce(MyThread thread) throws InterruptedException;
 
     protected void executeOperation(MyThread thread) throws InterruptedException {
-        synchronized (LOCK) {
+        synchronized (this) {
             while (this.value + thread.getPortion() < 0 || this.value + thread.getPortion() > capacity) {
-                LOCK.wait();
+                this.wait();
             }
             thread.setEndTime(nanoTime());
             this.value += thread.getPortion();
             System.out.println("Nr: " + counter++ + ", stan bufora: " + (value - thread.getPortion()) + " -> " + value +
-                    ", porcja: " + thread.getPortion() + ", czas oczekiwania: " + thread.getTime());
-            LOCK.notifyAll();
+                    ", porcja: " + thread.getPortion() + ", czas oczekiwania: " + thread.getWaitingTime());
+            this.notifyAll();
         }
     }
 }

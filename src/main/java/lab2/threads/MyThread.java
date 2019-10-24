@@ -42,7 +42,7 @@ public class MyThread extends Thread {
     private String getFileLog() {
         String space = "\t";
         if (abs(portion) < 1000) space += space;
-        return abs(portion) + space + getTime();
+        return abs(portion) + space + getWaitingTime() + "\n";
     }
 
     public void setStartTime(long startTime) {
@@ -57,7 +57,7 @@ public class MyThread extends Thread {
         return portion;
     }
 
-    public String getTime() {
+    public String getWaitingTime() {
         return TIME_FORMATTER.format((double) (endTime - startTime) / 1_000_000_000.0);
     }
 }
