@@ -1,12 +1,12 @@
-package main.java.lab2.bufor;
+package main.java.lab2.buffer;
 
 import main.java.lab2.threads.MyThread;
 
 import static java.lang.System.nanoTime;
 
-public class DummyBufor extends AbstractBufor {
+public class NaiveBuffer extends AbstractBuffer {
 
-    public DummyBufor(int capacity) {
+    public NaiveBuffer(int capacity) {
         super(capacity);
     }
 

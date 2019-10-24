@@ -1,17 +1,17 @@
-package main.java.lab2.bufor;
+package main.java.lab2.buffer;
 
 import main.java.lab2.threads.MyThread;
 
 import static java.lang.System.nanoTime;
 
-public class AlgoBufor extends AbstractBufor {
+public class FairBuffer extends AbstractBuffer {
     private final static Object CONSUMER_LOCK = new Object();
     private final static Object PRODUCER_LOCK = new Object();
 
     private boolean isConsumerFree = true;
     private boolean isProducerFree = true;
 
-    public AlgoBufor(int capacity) {
+    public FairBuffer(int capacity) {
         super(capacity);
     }
 

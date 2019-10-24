@@ -1,9 +1,9 @@
 package main.java.lab2.configuration;
 
-import main.java.lab2.bufor.AbstractBufor;
-import main.java.lab2.bufor.AlgoBufor;
-import main.java.lab2.bufor.BuforType;
-import main.java.lab2.bufor.DummyBufor;
+import main.java.lab2.buffer.AbstractBuffer;
+import main.java.lab2.buffer.FairBuffer;
+import main.java.lab2.buffer.BufferType;
+import main.java.lab2.buffer.NaiveBuffer;
 import main.java.lab2.threads.ThreadType;
 
 import java.io.FileWriter;
@@ -18,15 +18,15 @@ public class RunConfiguration {
     private final static String FILE_NAME_PATTERN = "times_.txt";
     private static Integer FILE_NUMBER = 0;
 
-    public AbstractBufor bufor;
+    public AbstractBuffer buffer;
     public FileWriter writer;
     public int capacity;
     public int numOfThreads;
     public int range;
     public LikelihoodType likelihoodType;
 
-    public RunConfiguration(String file, int capacity, int numOfThreads, LikelihoodType likelihoodType, BuforType buforType) throws IOException {
-        this.bufor = buforType == BuforType.DUMMY ? new DummyBufor(capacity) : new AlgoBufor(capacity);
+    public RunConfiguration(String file, int capacity, int numOfThreads, LikelihoodType likelihoodType, BufferType bufferType) throws IOException {
+        this.buffer = bufferType == BufferType.NAIVE ? new NaiveBuffer(capacity) : new FairBuffer(capacity);
         this.capacity = capacity;
         this.numOfThreads = numOfThreads;
         this.writer = new FileWriter(PACKAGE_PATH + file);
@@ -55,40 +55,40 @@ public class RunConfiguration {
         List<RunConfiguration> configurations = new LinkedList<>();
 
         configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.CONSTANT, BuforType.DUMMY));
+                LikelihoodType.CONSTANT, BufferType.NAIVE));
         configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.CONSTANT, BuforType.ALGO));
+                LikelihoodType.CONSTANT, BufferType.FAIR));
         configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.VARIABLE, BuforType.DUMMY));
+                LikelihoodType.VARIABLE, BufferType.NAIVE));
         configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.VARIABLE, BuforType.ALGO));
+                LikelihoodType.VARIABLE, BufferType.FAIR));
 
 //        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
-//                LikelihoodType.CONSTANT, BuforType.DUMMY));
+//                LikelihoodType.CONSTANT, BufferType.NAIVE));
 //        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
-//                LikelihoodType.CONSTANT, BuforType.ALGO));
+//                LikelihoodType.CONSTANT, BufferType.FAIR));
 //        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
-//                LikelihoodType.VARIABLE, BuforType.DUMMY));
+//                LikelihoodType.VARIABLE, BufferType.NAIVE));
 //        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
-//                LikelihoodType.VARIABLE, BuforType.ALGO));
+//                LikelihoodType.VARIABLE, BufferType.FAIR));
 //
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
-//                LikelihoodType.CONSTANT, BuforType.DUMMY));
+//                LikelihoodType.CONSTANT, BufferType.NAIVE));
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
-//                LikelihoodType.CONSTANT, BuforType.ALGO));
+//                LikelihoodType.CONSTANT, BufferType.FAIR));
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
-//                LikelihoodType.VARIABLE, BuforType.DUMMY));
+//                LikelihoodType.VARIABLE, BufferType.NAIVE));
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
-//                LikelihoodType.VARIABLE, BuforType.ALGO));
+//                LikelihoodType.VARIABLE, BufferType.FAIR));
 //
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
-//                LikelihoodType.CONSTANT, BuforType.DUMMY));
+//                LikelihoodType.CONSTANT, BufferType.NAIVE));
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
-//                LikelihoodType.CONSTANT, BuforType.ALGO));
+//                LikelihoodType.CONSTANT, BufferType.FAIR));
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
-//                LikelihoodType.VARIABLE, BuforType.DUMMY));
+//                LikelihoodType.VARIABLE, BufferType.NAIVE));
 //        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
-//                LikelihoodType.VARIABLE, BuforType.ALGO));
+//                LikelihoodType.VARIABLE, BufferType.FAIR));
         return configurations;
     }
 

@@ -1,15 +1,15 @@
-package main.java.lab2.bufor;
+package main.java.lab2.buffer;
 
 import main.java.lab2.threads.MyThread;
 
 import static java.lang.System.nanoTime;
 
-public abstract class AbstractBufor {
+public abstract class AbstractBuffer {
     private static int counter = 0;
     private int capacity;
     private Integer value = 0;
 
-    public AbstractBufor(int capacity) {
+    public AbstractBuffer(int capacity) {
         this.capacity = capacity;
     }
 

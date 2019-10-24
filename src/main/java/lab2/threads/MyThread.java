@@ -29,9 +29,9 @@ public class MyThread extends Thread {
     public void run() {
         try {
             if (type == ThreadType.CONSUMER) {
-                configuration.bufor.consume(this);
+                configuration.buffer.consume(this);
             } else {
-                configuration.bufor.produce(this);
+                configuration.buffer.produce(this);
             }
             configuration.writer.write(getFileLog());
         } catch (Exception e) {
