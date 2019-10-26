@@ -1,12 +1,12 @@
 package main.java.lab2.configuration;
 
+import main.java.lab2.DataWriter;
 import main.java.lab2.buffer.AbstractBuffer;
-import main.java.lab2.buffer.FairBuffer;
 import main.java.lab2.buffer.BufferType;
+import main.java.lab2.buffer.FairBuffer;
 import main.java.lab2.buffer.NaiveBuffer;
 import main.java.lab2.threads.ThreadType;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,20 +18,24 @@ public class RunConfiguration {
     private final static String FILE_NAME_PATTERN = "times_.txt";
     private static Integer FILE_NUMBER = 0;
 
-    public AbstractBuffer buffer;
-    public FileWriter writer;
-    public int capacity;
-    public int numOfThreads;
-    public int range;
-    public LikelihoodType likelihoodType;
+    private List<Integer> portions = new LinkedList<>();
+    private List<String> times = new LinkedList<>();
+    private LikelihoodType likelihoodType;
+    private AbstractBuffer buffer;
+    private int numOfThreads;
+    private int range;
 
-    public RunConfiguration(String file, int capacity, int numOfThreads, LikelihoodType likelihoodType, BufferType bufferType) throws IOException {
-        this.buffer = bufferType == BufferType.NAIVE ? new NaiveBuffer(capacity) : new FairBuffer(capacity);
-        this.capacity = capacity;
+    private RunConfiguration(int bufferCapacity, int numOfThreads, LikelihoodType likelihoodType, BufferType bufferType) {
+        this.buffer = bufferType == BufferType.NAIVE ? new NaiveBuffer(bufferCapacity) : new FairBuffer(bufferCapacity);
         this.numOfThreads = numOfThreads;
-        this.writer = new FileWriter(PACKAGE_PATH + file);
-        this.range = capacity / 2;
+        this.range = bufferCapacity / 2;
         this.likelihoodType = likelihoodType;
+    }
+
+    public void saveDate() throws IOException {
+        DataWriter writer = new DataWriter(PACKAGE_PATH + getFileName());
+        writer.write(portions, times);
+        writer.close();
     }
 
     public static int getRandomPortion(ThreadType type, int range) {
@@ -51,43 +55,48 @@ public class RunConfiguration {
         }
     }
 
-    public static List<RunConfiguration> getRunConfigurations() throws IOException {
+    public synchronized void addData(Integer portion, String time) {
+        this.portions.add(portion);
+        this.times.add(time);
+    }
+
+    public static List<RunConfiguration> getRunConfigurations() {
         List<RunConfiguration> configurations = new LinkedList<>();
 
-        configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.CONSTANT, BufferType.NAIVE));
-        configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.CONSTANT, BufferType.FAIR));
-        configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.VARIABLE, BufferType.NAIVE));
-        configurations.add(new RunConfiguration(getFileName(), 10000, 100,
-                LikelihoodType.VARIABLE, BufferType.FAIR));
+//        configurations.add(new RunConfiguration(10000, 100,
+//                LikelihoodType.CONSTANT, BufferType.NAIVE));
+//        configurations.add(new RunConfiguration(10000, 100,
+//                LikelihoodType.CONSTANT, BufferType.FAIR));
+//        configurations.add(new RunConfiguration(10000, 100,
+//                LikelihoodType.VARIABLE, BufferType.NAIVE));
+//        configurations.add(new RunConfiguration(10000, 100,
+//                LikelihoodType.VARIABLE, BufferType.FAIR));
 
-//        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
+        configurations.add(new RunConfiguration(10000, 1000,
+                LikelihoodType.CONSTANT, BufferType.NAIVE));
+        configurations.add(new RunConfiguration(10000, 1000,
+                LikelihoodType.CONSTANT, BufferType.FAIR));
+        configurations.add(new RunConfiguration(10000, 1000,
+                LikelihoodType.VARIABLE, BufferType.NAIVE));
+        configurations.add(new RunConfiguration(10000, 1000,
+                LikelihoodType.VARIABLE, BufferType.FAIR));
+//
+//        configurations.add(new RunConfiguration(100000, 100,
 //                LikelihoodType.CONSTANT, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
+//        configurations.add(new RunConfiguration(100000, 100,
 //                LikelihoodType.CONSTANT, BufferType.FAIR));
-//        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
+//        configurations.add(new RunConfiguration(100000, 100,
 //                LikelihoodType.VARIABLE, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(getFileName(), 10000, 1000,
+//        configurations.add(new RunConfiguration(100000, 100,
 //                LikelihoodType.VARIABLE, BufferType.FAIR));
 //
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
+//        configurations.add(new RunConfiguration(100000, 1000,
 //                LikelihoodType.CONSTANT, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
+//        configurations.add(new RunConfiguration(100000, 1000,
 //                LikelihoodType.CONSTANT, BufferType.FAIR));
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
+//        configurations.add(new RunConfiguration(100000, 1000,
 //                LikelihoodType.VARIABLE, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 100,
-//                LikelihoodType.VARIABLE, BufferType.FAIR));
-//
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
-//                LikelihoodType.CONSTANT, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
-//                LikelihoodType.CONSTANT, BufferType.FAIR));
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
-//                LikelihoodType.VARIABLE, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(getFileName(), 100000, 1000,
+//        configurations.add(new RunConfiguration(100000, 1000,
 //                LikelihoodType.VARIABLE, BufferType.FAIR));
         return configurations;
     }
@@ -95,5 +104,21 @@ public class RunConfiguration {
     private static String getFileName() {
         FILE_NUMBER++;
         return FILE_NAME_PATTERN.replace("_", FILE_NUMBER.toString());
+    }
+
+    public AbstractBuffer getBuffer() {
+        return buffer;
+    }
+
+    public int getNumOfThreads() {
+        return numOfThreads;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public LikelihoodType getLikelihoodType() {
+        return likelihoodType;
     }
 }

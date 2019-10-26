@@ -6,8 +6,6 @@ import main.java.lab2.configuration.RunConfiguration;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import static java.lang.Math.abs;
-
 public class MyThread extends Thread {
     private static NumberFormat TIME_FORMATTER = new DecimalFormat("#0.0000000");
 
@@ -19,9 +17,9 @@ public class MyThread extends Thread {
 
     public MyThread(RunConfiguration configuration, ThreadType type) {
         this.configuration = configuration;
-        this.portion = configuration.likelihoodType == LikelihoodType.CONSTANT ?
-                RunConfiguration.getRandomPortion(type, configuration.range) :
-                RunConfiguration.getRandomPortionWithVariableLikelihood(type, configuration.range);
+        this.portion = configuration.getLikelihoodType() == LikelihoodType.CONSTANT ?
+                RunConfiguration.getRandomPortion(type, configuration.getRange()) :
+                RunConfiguration.getRandomPortionWithVariableLikelihood(type, configuration.getRange());
         this.type = type;
     }
 
@@ -29,20 +27,14 @@ public class MyThread extends Thread {
     public void run() {
         try {
             if (type == ThreadType.CONSUMER) {
-                configuration.buffer.consume(this);
+                configuration.getBuffer().consume(this);
             } else {
-                configuration.buffer.produce(this);
+                configuration.getBuffer().produce(this);
             }
-            configuration.writer.write(getFileLog());
+            configuration.addData(portion, getWaitingTime());
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private String getFileLog() {
-        String space = "\t";
-        if (abs(portion) < 1000) space += space;
-        return abs(portion) + space + getWaitingTime() + "\n";
     }
 
     public void setStartTime(long startTime) {
