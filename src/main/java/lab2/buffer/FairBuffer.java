@@ -2,14 +2,14 @@ package main.java.lab2.buffer;
 
 import main.java.lab2.threads.MyThread;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import static java.lang.System.nanoTime;
 
 public class FairBuffer extends AbstractBuffer {
-    private final static Object CONSUMER_LOCK = new Object();
-    private final static Object PRODUCER_LOCK = new Object();
-
-    private boolean isConsumerFree = true;
-    private boolean isProducerFree = true;
+    private final Lock consumerLock = new ReentrantLock();
+    private final Lock producerLock = new ReentrantLock();
 
     public FairBuffer(int capacity) {
         super(capacity);
@@ -18,32 +18,18 @@ public class FairBuffer extends AbstractBuffer {
     @Override
     public void consume(MyThread thread) throws InterruptedException {
         thread.setStartTime(nanoTime());
-        synchronized (CONSUMER_LOCK) {
-            while (!isConsumerFree)
-                CONSUMER_LOCK.wait();
-            isConsumerFree = false;
-        }
-        executeOperation(thread);
 
-        synchronized (CONSUMER_LOCK) {
-            isConsumerFree = true;
-            CONSUMER_LOCK.notify();
-        }
+        consumerLock.lock();
+        executeOperation(thread);
+        consumerLock.unlock();
     }
 
     @Override
     public void produce(MyThread thread) throws InterruptedException {
         thread.setStartTime(nanoTime());
-        synchronized (PRODUCER_LOCK) {
-            while (!isProducerFree)
-                PRODUCER_LOCK.wait();
-            isProducerFree = false;
-        }
-        executeOperation(thread);
 
-        synchronized (PRODUCER_LOCK) {
-            isProducerFree = true;
-            PRODUCER_LOCK.notify();
-        }
+        producerLock.lock();
+        executeOperation(thread);
+        producerLock.unlock();
     }
 }
