@@ -16,7 +16,7 @@ import java.util.Random;
 public class RunConfiguration {
     private final static Random RANDOM = new Random();
     private final static String PACKAGE_PATH = "src/main/resources/lab2/";
-    private final static String SCRIPT_FILE_NAME_PATTERN = "script_.txt";
+    private final static String SCRIPT_FILE_NAME_PATTERN = "script_.r";
     private static Integer FILE_NUMBER = 0;
     private static RScriptBuilder scriptBuilder = new RScriptBuilder();
 
@@ -46,14 +46,10 @@ public class RunConfiguration {
 
     public static int getRandomPortionWithVariableLikelihood(ThreadType type, int range) {
         int param = RANDOM.nextInt(range);
-        if (param < (range / 2)) {
+        if (param < (19 * range / 20)) {
             return type.getValue() * RANDOM.nextInt(range / 5);
-        } else if (param < (3 * range / 4)) {
-            return type.getValue() * RANDOM.nextInt(range / 4);
-        } else if (param < (19 * range / 20)) {
-            return type.getValue() * RANDOM.nextInt(range / 3);
         } else {
-            return type.getValue() * RANDOM.nextInt(range);
+            return type.getValue() * (RANDOM.nextInt(range / 10) + range * 9/10 + 1) ;
         }
     }
 
@@ -67,12 +63,12 @@ public class RunConfiguration {
 
         configurations.add(new RunConfiguration(10000, 100,
                 LikelihoodType.CONSTANT, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(10000, 100,
-//                LikelihoodType.CONSTANT, BufferType.FAIR));
-//        configurations.add(new RunConfiguration(10000, 100,
-//                LikelihoodType.VARIABLE, BufferType.NAIVE));
-//        configurations.add(new RunConfiguration(10000, 100,
-//                LikelihoodType.VARIABLE, BufferType.FAIR));
+        configurations.add(new RunConfiguration(10000, 100,
+                LikelihoodType.CONSTANT, BufferType.FAIR));
+        configurations.add(new RunConfiguration(10000, 100,
+                LikelihoodType.VARIABLE, BufferType.NAIVE));
+        configurations.add(new RunConfiguration(10000, 100,
+                LikelihoodType.VARIABLE, BufferType.FAIR));
 
 //        configurations.add(new RunConfiguration(10000, 1000,
 //                LikelihoodType.CONSTANT, BufferType.NAIVE));
