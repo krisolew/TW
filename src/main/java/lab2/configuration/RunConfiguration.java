@@ -1,12 +1,13 @@
 package main.java.lab2.configuration;
 
-import main.java.lab2.DataWriter;
+import main.java.lab2.RScriptBuilder;
 import main.java.lab2.buffer.AbstractBuffer;
 import main.java.lab2.buffer.BufferType;
 import main.java.lab2.buffer.FairBuffer;
 import main.java.lab2.buffer.NaiveBuffer;
 import main.java.lab2.threads.ThreadType;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,8 +16,9 @@ import java.util.Random;
 public class RunConfiguration {
     private final static Random RANDOM = new Random();
     private final static String PACKAGE_PATH = "src/main/resources/lab2/";
-    private final static String FILE_NAME_PATTERN = "times_.txt";
+    private final static String SCRIPT_FILE_NAME_PATTERN = "script_.txt";
     private static Integer FILE_NUMBER = 0;
+    private static RScriptBuilder scriptBuilder = new RScriptBuilder();
 
     private List<Integer> portions = new LinkedList<>();
     private List<String> times = new LinkedList<>();
@@ -33,8 +35,8 @@ public class RunConfiguration {
     }
 
     public void saveDate() throws IOException {
-        DataWriter writer = new DataWriter(PACKAGE_PATH + getFileName());
-        writer.write(portions, times);
+        FileWriter writer = new FileWriter(PACKAGE_PATH + getScriptFileName());
+        writer.write(scriptBuilder.getScript(portions, times, range, 10));
         writer.close();
     }
 
@@ -63,8 +65,8 @@ public class RunConfiguration {
     public static List<RunConfiguration> getRunConfigurations() {
         List<RunConfiguration> configurations = new LinkedList<>();
 
-//        configurations.add(new RunConfiguration(10000, 100,
-//                LikelihoodType.CONSTANT, BufferType.NAIVE));
+        configurations.add(new RunConfiguration(10000, 100,
+                LikelihoodType.CONSTANT, BufferType.NAIVE));
 //        configurations.add(new RunConfiguration(10000, 100,
 //                LikelihoodType.CONSTANT, BufferType.FAIR));
 //        configurations.add(new RunConfiguration(10000, 100,
@@ -72,14 +74,14 @@ public class RunConfiguration {
 //        configurations.add(new RunConfiguration(10000, 100,
 //                LikelihoodType.VARIABLE, BufferType.FAIR));
 
-        configurations.add(new RunConfiguration(10000, 1000,
-                LikelihoodType.CONSTANT, BufferType.NAIVE));
-        configurations.add(new RunConfiguration(10000, 1000,
-                LikelihoodType.CONSTANT, BufferType.FAIR));
-        configurations.add(new RunConfiguration(10000, 1000,
-                LikelihoodType.VARIABLE, BufferType.NAIVE));
-        configurations.add(new RunConfiguration(10000, 1000,
-                LikelihoodType.VARIABLE, BufferType.FAIR));
+//        configurations.add(new RunConfiguration(10000, 1000,
+//                LikelihoodType.CONSTANT, BufferType.NAIVE));
+//        configurations.add(new RunConfiguration(10000, 1000,
+//                LikelihoodType.CONSTANT, BufferType.FAIR));
+//        configurations.add(new RunConfiguration(10000, 1000,
+//                LikelihoodType.VARIABLE, BufferType.NAIVE));
+//        configurations.add(new RunConfiguration(10000, 1000,
+//                LikelihoodType.VARIABLE, BufferType.FAIR));
 //
 //        configurations.add(new RunConfiguration(100000, 100,
 //                LikelihoodType.CONSTANT, BufferType.NAIVE));
@@ -101,9 +103,9 @@ public class RunConfiguration {
         return configurations;
     }
 
-    private static String getFileName() {
+    private static String getScriptFileName() {
         FILE_NUMBER++;
-        return FILE_NAME_PATTERN.replace("_", FILE_NUMBER.toString());
+        return SCRIPT_FILE_NAME_PATTERN.replace("_", FILE_NUMBER.toString());
     }
 
     public AbstractBuffer getBuffer() {
