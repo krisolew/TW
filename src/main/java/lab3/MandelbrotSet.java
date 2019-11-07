@@ -26,7 +26,7 @@ public class MandelbrotSet extends JFrame {
 
     public void count(int firstDimension, int secondDimension) {
         for (int y = firstDimension; y < secondDimension; y++) {
-            for (int x = 0; x < getWidth(); x++) {
+            for (int x = 0; x < getHeight(); x++) {
                 zx = zy = 0;
                 cX = (x - width / 2) / zoom;
                 cY = (y - height / 2) / zoom;
